@@ -20,14 +20,14 @@ public class Extruder {
 	}
 	
 	private static void showUsage() {
-		log("Usage: extruder [width_per_tile] [height_per_tile] file");
+		log("Usage: extruder [width_per_tile] [height_per_tile] src_file dst_file (optional)");
 	}
 	
-	private static void extrude(int tileWidth, int tileHeight, String file) throws IOException {
-		log("extrude() %d %d %s", tileWidth, tileHeight, file);
-		File f = new File(file);
+	private static void extrude(int tileWidth, int tileHeight, String sourceFile, String destFile) throws IOException {
+		log("extrude() %d %d %s %s", tileWidth, tileHeight, sourceFile, destFile);
+		File f = new File(sourceFile);
 		if(!f.exists()) {
-			err("Error! %s does not exist", file);
+			err("Error! %s does not exist", sourceFile);
 			return;
 		}
 		BufferedImage image = ImageIO.read(f);
@@ -80,15 +80,13 @@ public class Extruder {
 			}
 		}
 		
-		final String name = file.substring(0, file.lastIndexOf('.'));
-		final String ext = file.substring(file.lastIndexOf('.') + 1);
-		final String extrudedFile = name + "_ext." + ext;
-		log("Writing extruded file %s", extrudedFile);
-		ImageIO.write(destination, ext, new File(extrudedFile));
+		final String ext = destFile.substring(destFile.lastIndexOf('.') + 1);
+		log("Writing extruded file %s", destFile);
+		ImageIO.write(destination, ext, new File(destFile));
 	}
 	
 	public static void main(String[] args) {		
-		if(args.length != 3) {
+		if(args.length < 3) {
 			showUsage();
 			return;
 		}		
@@ -96,8 +94,9 @@ public class Extruder {
 		try {
 			int width = Integer.parseInt(args[0]);
 			int height = Integer.parseInt(args[1]);
-			String file = args[2];
-			extrude(width, height, file);
+			String sourceFile = args[2];
+			String destFile = (args.length == 4) ? args[3] : sourceFile;
+			extrude(width, height, sourceFile, destFile);
 		}
 		catch(NumberFormatException e) {
 			err("Unable to parse arguments: %s", e.getLocalizedMessage());
