@@ -49,6 +49,7 @@ public class Extruder {
 		BufferedImage destination = new BufferedImage(imageWidth + (tileColumns * 2), imageHeight + (tileRows * 2), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D)destination.getGraphics();
 		g.setBackground(new Color(0, 0, 0, 0));
+		g.clearRect(0, 0, destination.getWidth(), destination.getHeight());
 
 		for(int x = 0; x < tileColumns; x++) {
 			for(int y = 0; y < tileRows; y++) {
@@ -59,7 +60,7 @@ public class Extruder {
 				// top-left pixel
 				g.drawImage(image, dx - 1, dy - 1, dx, dy, sx, sy, sx + 1, sy + 1, null);
 				// top-right pixel
-				g.drawImage(image, dx + tileWidth, dy - 1, dx + tileWidth + 1, dy - 1 + tileHeight + 1, sx + tileWidth - 1, sy, sx + tileWidth - 1 + 1, sy + 1, null);
+				g.drawImage(image, dx + tileWidth, dy - 1, dx + tileWidth + 1, dy - 1 + 1, sx + tileWidth - 1, sy, sx + tileWidth - 1 + 1, sy + 1, null);
 				// top edge
 				g.drawImage(image, dx, dy - 1, dx + tileWidth, dy - 1 + 1, sx, sy, sx + tileWidth, sy + 1, null);
 
